@@ -6,7 +6,7 @@ class Session
   def initialize(req)
     cookie = req.cookies['_rails_lite_app']
     if cookie
-      @cookie = JSON.parse cookie
+      @cookie = JSON.parse(cookie)
     else
       @cookie = {}
     end

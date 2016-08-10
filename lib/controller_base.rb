@@ -8,10 +8,11 @@ class ControllerBase
   attr_reader :req, :res, :params
 
   # Setup the controller
-  def initialize(req, res)
+  def initialize(req, res, route_params)
     @req = req
     @res = res
     @already_built_response = false
+    @params = route_params
   end
 
   # Helper method to alias @already_built_response
@@ -46,7 +47,7 @@ class ControllerBase
     controller_name = self.class.to_s.underscore
     path = "views/#{controller_name}/#{name}.html.erb"
     file_content = File.read(path)
-    content = ERB.new("<%= file_content %>").result(binding)
+    content = ERB.new(file_content).result(binding)
     render_content(content, "text/html")
   end
 
@@ -57,5 +58,10 @@ class ControllerBase
 
   # use this with the router to call action_name (:index, :show, :create...)
   def invoke_action(name)
+    # Router.send(name, @req.path, @req.request_method, self.class, name)
+    send(name)
+    unless @already_built_response
+      render(name)
+    end
   end
 end
