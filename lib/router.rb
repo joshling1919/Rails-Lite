@@ -17,8 +17,7 @@ class Route
   # use pattern to pull out route params (save for later?)
   # instantiate controller and call controller action
   def run(req, res)
-    match_data = @pattern.match(req.url)
-    byebug
+    match_data = @pattern.match(req.path)
     route_params = {}
     if match_data
       match_data.names.each do |key|
